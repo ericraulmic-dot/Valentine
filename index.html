@@ -2,115 +2,145 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Happy Valentine’s 💖</title>
+  <title>Will You Be Mine? 💖</title>
   <style>
     body {
-      font-family: "Comic Sans MS", cursive, sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
       height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       margin: 0;
+      background: radial-gradient(circle, #ffdde1, #ee9ca7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Comic Sans MS', cursive;
+      overflow: hidden;
     }
 
-    .card {
+    .box {
       background: white;
-      padding: 30px 40px;
-      border-radius: 20px;
+      padding: 40px;
+      border-radius: 25px;
       text-align: center;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-      max-width: 350px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      z-index: 2;
     }
 
     h1 {
       color: #e91e63;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 18px;
     }
 
     button {
+      padding: 12px 22px;
+      font-size: 16px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      margin: 8px;
+      transition: transform 0.2s;
+    }
+
+    .yes {
       background: #e91e63;
       color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 25px;
-      font-size: 16px;
-      cursor: pointer;
-      margin: 10px;
-      transition: transform 0.2s, background 0.2s;
+    }
+
+    .no {
+      background: #ccc;
     }
 
     button:hover {
-      background: #c2185b;
-      transform: scale(1.05);
+      transform: scale(1.1);
     }
 
-    .heart {
-      font-size: 40px;
-      animation: float 1.5s infinite ease-in-out;
+    .floating {
+      position: absolute;
+      animation: floatUp 3s linear forwards;
+      font-size: 24px;
     }
 
-    @keyframes float {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0); }
+    @keyframes floatUp {
+      to {
+        transform: translateY(-120vh);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <div class="heart">❤️</div>
-    <h1>Happy Valentine’s Day!</h1>
-    <p id="message">Will you be my Valentine?</p>
+  <div class="box" id="box">
+    <h1>Will you be my Valentine? 💘</h1>
+    <p id="text">Think carefully…</p>
 
-    <button onclick="yesClicked()">Yes 💕</button>
-    <button onclick="noClicked()">No 😅</button>
+    <div id="buttons">
+      <button class="yes" onclick="yes()">YES 💖</button>
+      <button class="no" id="no" onmouseover="runAway()">NO 😬</button>
+    </div>
   </div>
 
-  <script>
-    function yesClicked() {
-      document.getElementById("message").innerHTML =
-        "Yay! 💖 You just made my heart do a happy dance! 🥰";
-      confetti();
+<script>
+  let yesCount = 1;
+
+  function yes() {
+    yesCount++;
+
+    document.getElementById("text").innerText =
+      yesCount < 6
+        ? "Are you REALLY sure? 😏"
+        : "OKAY I GET IT 😍💍";
+
+    spawnYesButtons();
+    hearts();
+
+    if (yesCount > 8) finalYes();
+  }
+
+  function spawnYesButtons() {
+    const btn = document.createElement("button");
+    btn.className = "yes";
+    btn.innerText = "YES 💕";
+    btn.onclick = yes;
+
+    btn.style.position = "absolute";
+    btn.style.left = Math.random() * 80 + "vw";
+    btn.style.top = Math.random() * 80 + "vh";
+
+    document.body.appendChild(btn);
+  }
+
+  function runAway() {
+    const no = document.getElementById("no");
+    no.style.position = "absolute";
+    no.style.left = Math.random() * 80 + "vw";
+    no.style.top = Math.random() * 80 + "vh";
+  }
+
+  function hearts() {
+    for (let i = 0; i < 6; i++) {
+      const h = document.createElement("div");
+      h.className = "floating";
+      h.innerText = "💗";
+      h.style.left = Math.random() * 100 + "vw";
+      h.style.top = "100vh";
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 3000);
     }
+  }
 
-    function noClicked() {
-      const messages = [
-        "Are you sure? 🥺",
-        "Think again 😏",
-        "My heart says try one more time 💔",
-        "Okay but… still sending love 💖"
-      ];
-      document.getElementById("message").innerHTML =
-        messages[Math.floor(Math.random() * messages.length)];
-    }
-
-    function confetti() {
-      for (let i = 0; i < 20; i++) {
-        const heart = document.createElement("div");
-        heart.innerHTML = "💗";
-        heart.style.position = "fixed";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.top = "100vh";
-        heart.style.fontSize = "24px";
-        heart.style.animation = "rise 2s linear forwards";
-        document.body.appendChild(heart);
-
-        setTimeout(() => heart.remove(), 2000);
-      }
-    }
-
-    const style = document.createElement("style");
-    style.innerHTML = `
-      @keyframes rise {
-        to {
-          transform: translateY(-120vh);
-          opacity: 0;
-        }
-      }
+  function finalYes() {
+    document.body.innerHTML = `
+      <div class="box">
+        <h1>IT'S A YES!!! 💍💖</h1>
+        <p>You’re officially stuck with me 😌</p>
+        <p>Happy Valentine’s Day 💘</p>
+      </div>
     `;
-    document.head.appendChild(style);
-  </script>
+  }
+</script>
 
 </body>
 </html>
